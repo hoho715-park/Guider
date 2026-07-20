@@ -6,6 +6,7 @@
   --g-text: #1a1a2e;
   --g-muted: #8a8aa3;
   --g-border: #ececf2;
+  --g-gap: 20px; /* 카드와 화면 가장자리 사이 여백 (상·하·우 공통) */
 
   position: fixed;
   inset: 0;
@@ -25,98 +26,51 @@
   object-fit: contain;
 }
 
-/* --------------------------------------------- 페이지 밀어내기(push) 모드
-   패널이 화면을 덮지 않고, 페이지 본문이 패널 폭만큼 좁아지며 옆으로 밀린다.
-   body 에 transform 을 주면 body 안의 position:fixed 요소(사이트 상단바 등)도
-   좁아진 body 를 기준으로 배치되어 함께 밀려난다. */
-html.guider-pushed {
-  --guider-width: 380px;
-  overflow-x: hidden !important;
-}
-
-html.guider-pushed > body {
-  width: calc(100% - var(--guider-width)) !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  transform: translateX(0);
-  transform-origin: top left;
-  transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ---------------------------------------------------------------- 패널 */
+/* ------------------------------------------------------- 패널 = 카드 그 자체
+   별도의 컨테이너(배경/여백)를 두지 않는다. 패널 박스가 곧 떠 있는 카드이며,
+   그래서 카드 옆에 띠가 생길 수 있는 영역 자체가 존재하지 않는다. */
 #guider-root .guider-panel {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 380px;
-  height: 100%;
+  /* 상·하·우 여백을 동일하게 */
+  top: var(--g-gap);
+  right: var(--g-gap);
+  bottom: var(--g-gap);
+  width: 362px;
   display: flex;
   flex-direction: column;
-  background: #f4f4f8;
-  border-left: 1px solid var(--g-border);
-  box-shadow: -8px 0 32px rgba(20, 20, 50, 0.12);
-  transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: auto;
+
+  background: #fff;
+  border-radius: 22px;
+  /* 페이지 위에 떠 있는 느낌을 주는 다층 그림자 */
+  box-shadow: 0 1px 2px rgba(20, 20, 50, 0.06),
+    0 12px 28px rgba(20, 20, 50, 0.14), 0 28px 60px rgba(20, 20, 50, 0.16);
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(24px) scale(0.98);
+  transform-origin: right center;
+  transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.24s ease, visibility 0s linear 0.34s;
+  pointer-events: none;
 }
 
 #guider-root.guider-open .guider-panel {
-  transform: translateX(0);
-}
-
-/* ---------------------------------------------------------------- 헤더 */
-#guider-root .guider-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #fff;
-  border-bottom: 1px solid var(--g-border);
-  flex-shrink: 0;
-}
-
-#guider-root .guider-header__logo {
-  width: 20px;
-  height: 20px;
-}
-
-#guider-root .guider-header__title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-right: auto;
-}
-
-#guider-root .guider-header__btn {
-  border: 0;
-  background: transparent;
-  color: var(--g-muted);
-  padding: 4px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  line-height: 0;
-}
-
-#guider-root .guider-header__btn:hover {
-  background: #f2f2f7;
-  color: var(--g-text);
-}
-
-#guider-root .guider-header__btn.is-active {
-  color: var(--g-pink);
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.24s ease, visibility 0s;
+  pointer-events: auto;
 }
 
 /* ---------------------------------------------------------------- 카드 */
 #guider-root .guider-card {
   flex: 1;
   min-height: 0;
-  margin: 12px;
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(20, 20, 50, 0.06);
-  overflow: hidden;
+  background: transparent;
 }
 
 #guider-root .guider-card__brand {
@@ -138,6 +92,11 @@ html.guider-pushed > body {
   letter-spacing: -0.2px;
 }
 
+#guider-root .guider-card__brand-text {
+  min-width: 0;
+  flex: 1;
+}
+
 #guider-root .guider-card__site {
   font-size: 11px;
   color: var(--g-muted);
@@ -145,7 +104,25 @@ html.guider-pushed > body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 260px;
+}
+
+/* 카드 우측 상단 닫기 버튼 */
+#guider-root .guider-close {
+  flex-shrink: 0;
+  align-self: flex-start;
+  border: 0;
+  background: transparent;
+  color: var(--g-muted);
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  line-height: 0;
+}
+
+#guider-root .guider-close:hover {
+  background: #f2f2f7;
+  color: var(--g-text);
 }
 
 /* ------------------------------------------------------------ 메시지 영역 */
@@ -289,7 +266,7 @@ html.guider-pushed > body {
   position: relative;
   flex-shrink: 0;
   border-top: 1px solid var(--g-border);
-  padding: 12px 14px 10px;
+  padding: 12px 14px 14px;
 }
 
 #guider-root .guider-input__field {
@@ -341,8 +318,8 @@ html.guider-pushed > body {
 /* ------------------------------------------------------------------ FAB */
 #guider-root .guider-fab {
   position: absolute;
-  right: 22px;
-  bottom: 22px;
+  right: var(--g-gap);
+  bottom: var(--g-gap);
   width: 56px;
   height: 56px;
   border: 0;
@@ -354,7 +331,7 @@ html.guider-pushed > body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, opacity 0.2s;
+  transition: transform 0.2s, opacity 0.2s, visibility 0s;
 }
 
 #guider-root .guider-fab img {
@@ -366,8 +343,11 @@ html.guider-pushed > body {
   transform: scale(1.06);
 }
 
+/* 패널이 열려 있는 동안에는 FAB 를 완전히 숨긴다 */
 #guider-root.guider-open .guider-fab {
   opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9);
   pointer-events: none;
 }
 

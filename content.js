@@ -10,6 +10,9 @@
 
   const LOGO_URL = chrome.runtime.getURL("icons/logo.png");
 
+  // 구버전(페이지 밀어내기 방식)의 잔여 클래스 제거
+  document.documentElement.classList.remove("guider-pushed");
+
   // ---------------------------------------------------------------------------
   // 시연 시나리오: 질문 키워드 -> 응답 문구 + 하이라이트할 요소 선택자 후보
   // 실제 페이지 구조에 맞춰 selectors 를 자유롭게 추가/수정하면 된다.
@@ -76,17 +79,6 @@
   root.setAttribute("data-guider", "");
   root.innerHTML = `
     <div class="guider-panel" role="dialog" aria-label="Guider">
-      <header class="guider-header">
-        <img class="guider-header__logo" src="${LOGO_URL}" alt="" />
-        <span class="guider-header__title">Guider</span>
-        <button class="guider-header__btn guider-pin" title="고정" aria-label="고정">
-          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M14 3l7 7-2.5 1-1.8 5.2-2.6-2.6-5.6 5.6-1-1 5.6-5.6-2.6-2.6L15 8 14 3z" fill="currentColor"/></svg>
-        </button>
-        <button class="guider-header__btn guider-close" title="닫기" aria-label="닫기">
-          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </header>
-
       <div class="guider-card">
         <div class="guider-card__brand">
           <img class="guider-card__logo-sm" src="${LOGO_URL}" alt="" />
@@ -94,6 +86,9 @@
             <div class="guider-card__name">Guider</div>
             <div class="guider-card__site"></div>
           </div>
+          <button class="guider-close" title="닫기" aria-label="닫기">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
         </div>
 
         <div class="guider-messages" aria-live="polite">
@@ -139,6 +134,19 @@
 
   const panel = root.querySelector(".guider-panel");
   const fab = root.querySelector(".guider-fab");
+
+  // 카드 위/아래 여백 (px). 이 값 하나로 상·하가 항상 동일하게 유지된다.
+  const GAP = 20;
+
+  // 구버전 스타일시트가 남아 있어도 항상 이기도록 인라인으로 강제 지정한다.
+  // (인라인 스타일은 외부 CSS 규칙보다 우선한다)
+  panel.style.setProperty("top", GAP + "px", "important");
+  panel.style.setProperty("bottom", GAP + "px", "important");
+  panel.style.setProperty("right", GAP + "px", "important");
+  panel.style.setProperty("height", "auto", "important");
+  panel.style.setProperty("max-height", "none", "important");
+  fab.style.setProperty("bottom", GAP + "px", "important");
+  fab.style.setProperty("right", GAP + "px", "important");
   const messages = root.querySelector(".guider-messages");
   const form = root.querySelector(".guider-input");
   const field = root.querySelector(".guider-input__field");
@@ -149,21 +157,12 @@
   // ---------------------------------------------------------------------------
   // 열기 / 닫기
   // ---------------------------------------------------------------------------
-  // 페이지 본문을 패널 폭만큼 밀어낸다(가리지 않음)
-  function setPushed(on) {
-    document.documentElement.classList.toggle("guider-pushed", on);
-    // 사이트가 레이아웃을 다시 계산하도록 resize 이벤트를 흘려준다
-    setTimeout(() => window.dispatchEvent(new Event("resize")), 340);
-  }
-
   function open() {
     root.classList.add("guider-open");
-    setPushed(true);
     setTimeout(() => field.focus(), 250);
   }
   function close() {
     root.classList.remove("guider-open");
-    setPushed(false);
     clearHighlight();
   }
   function toggle() {
@@ -172,9 +171,6 @@
 
   root.querySelector(".guider-close").addEventListener("click", close);
   fab.addEventListener("click", open);
-  root.querySelector(".guider-pin").addEventListener("click", (e) => {
-    e.currentTarget.classList.toggle("is-active");
-  });
 
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg?.type === "GUIDER_TOGGLE") toggle();
