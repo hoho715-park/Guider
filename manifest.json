@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Guider",
+  "version": "0.1.0",
+  "description": "페이지에서 원하는 작업의 클릭 위치를 안내해주는 AI 가이드",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_title": "Guider 열기 / 닫기",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*.png", "icons/*.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

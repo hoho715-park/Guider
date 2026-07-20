@@ -1,0 +1,403 @@
+/* Guider - 시연용 사이드 패널 스타일 */
+
+#guider-root {
+  --g-pink: #e6007e;
+  --g-purple: #7b2ff7;
+  --g-text: #1a1a2e;
+  --g-muted: #8a8aa3;
+  --g-border: #ececf2;
+
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  font-family: "Pretendard", "Malgun Gothic", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  color: var(--g-text);
+}
+
+#guider-root * {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------- 패널 */
+#guider-root .guider-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f4f4f8;
+  border-left: 1px solid var(--g-border);
+  box-shadow: -8px 0 32px rgba(20, 20, 50, 0.12);
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+}
+
+#guider-root.guider-open .guider-panel {
+  transform: translateX(0);
+}
+
+/* ---------------------------------------------------------------- 헤더 */
+#guider-root .guider-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--g-border);
+  flex-shrink: 0;
+}
+
+#guider-root .guider-header__logo {
+  width: 20px;
+  height: 20px;
+}
+
+#guider-root .guider-header__title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: auto;
+}
+
+#guider-root .guider-header__btn {
+  border: 0;
+  background: transparent;
+  color: var(--g-muted);
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  line-height: 0;
+}
+
+#guider-root .guider-header__btn:hover {
+  background: #f2f2f7;
+  color: var(--g-text);
+}
+
+#guider-root .guider-header__btn.is-active {
+  color: var(--g-pink);
+}
+
+/* ---------------------------------------------------------------- 카드 */
+#guider-root .guider-card {
+  flex: 1;
+  min-height: 0;
+  margin: 12px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(20, 20, 50, 0.06);
+  overflow: hidden;
+}
+
+#guider-root .guider-card__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px 12px;
+  flex-shrink: 0;
+}
+
+#guider-root .guider-card__logo-sm {
+  width: 34px;
+  height: 34px;
+}
+
+#guider-root .guider-card__name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+#guider-root .guider-card__site {
+  font-size: 11px;
+  color: var(--g-muted);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* ------------------------------------------------------------ 메시지 영역 */
+#guider-root .guider-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 18px 16px;
+}
+
+#guider-root .guider-messages::-webkit-scrollbar {
+  width: 6px;
+}
+#guider-root .guider-messages::-webkit-scrollbar-thumb {
+  background: #dcdce6;
+  border-radius: 3px;
+}
+
+/* 인트로 */
+#guider-root .guider-intro {
+  text-align: center;
+  padding: 26px 8px 0;
+}
+
+#guider-root .guider-intro__logo {
+  width: 108px;
+  height: 108px;
+  margin-bottom: 18px;
+}
+
+#guider-root .guider-intro__title {
+  margin: 0 0 10px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--g-pink);
+}
+
+#guider-root .guider-intro__desc {
+  margin: 0 0 26px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #6b6b85;
+}
+
+#guider-root .guider-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+#guider-root .guider-example {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+#guider-root .guider-example__tag {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--g-pink);
+  margin-bottom: 5px;
+}
+
+#guider-root .guider-example__text {
+  display: block;
+  font-size: 13.5px;
+  color: #4a4a63;
+}
+
+#guider-root .guider-example:hover .guider-example__text {
+  color: var(--g-pink);
+}
+
+/* 말풍선 */
+#guider-root .guider-msg {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+#guider-root .guider-msg--user {
+  justify-content: flex-end;
+}
+
+#guider-root .guider-bubble {
+  max-width: 86%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+#guider-root .guider-msg--user .guider-bubble {
+  background: linear-gradient(135deg, var(--g-pink), var(--g-purple));
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+#guider-root .guider-msg--bot .guider-bubble {
+  background: #f4f4f8;
+  color: var(--g-text);
+  border-bottom-left-radius: 4px;
+}
+
+/* 타이핑 인디케이터 */
+#guider-root .guider-typing .guider-bubble {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 14px;
+}
+
+#guider-root .guider-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--g-pink);
+  opacity: 0.4;
+  animation: guider-dot 1.2s infinite;
+}
+#guider-root .guider-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+#guider-root .guider-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes guider-dot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ---------------------------------------------------------------- 입력 */
+#guider-root .guider-input {
+  position: relative;
+  flex-shrink: 0;
+  border-top: 1px solid var(--g-border);
+  padding: 12px 14px 10px;
+}
+
+#guider-root .guider-input__field {
+  width: 100%;
+  border: 1px solid var(--g-border);
+  border-radius: 12px;
+  padding: 10px 40px 10px 12px;
+  font: inherit;
+  font-size: 13.5px;
+  resize: none;
+  outline: none;
+  background: #fafafd;
+  color: var(--g-text);
+  max-height: 120px;
+}
+
+#guider-root .guider-input__field:focus {
+  border-color: var(--g-pink);
+  background: #fff;
+}
+
+#guider-root .guider-input__field::placeholder {
+  color: #b4b4c6;
+}
+
+#guider-root .guider-input__send {
+  position: absolute;
+  right: 22px;
+  top: 20px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--g-pink), var(--g-purple));
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#guider-root .guider-input__hint {
+  margin-top: 7px;
+  font-size: 11px;
+  color: #b4b4c6;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ FAB */
+#guider-root .guider-fab {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(230, 0, 126, 0.28);
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+#guider-root .guider-fab img {
+  width: 34px;
+  height: 34px;
+}
+
+#guider-root .guider-fab:hover {
+  transform: scale(1.06);
+}
+
+#guider-root.guider-open .guider-fab {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------- 하이라이트 */
+.guider-highlight {
+  position: fixed;
+  z-index: 2147482999;
+  pointer-events: none;
+}
+
+.guider-highlight__ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid #e6007e;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(15, 15, 40, 0.38);
+}
+
+.guider-highlight__pulse {
+  position: absolute;
+  inset: -6px;
+  border: 2px solid #e6007e;
+  border-radius: 16px;
+  animation: guider-pulse 1.6s ease-out infinite;
+}
+
+@keyframes guider-pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.12); opacity: 0; }
+}
+
+.guider-highlight__label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #e6007e, #7b2ff7);
+  color: #fff;
+  font-family: "Pretendard", "Malgun Gothic", -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(230, 0, 126, 0.4);
+}
+
+.guider-highlight__label::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #7b2ff7;
+}
