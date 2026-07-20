@@ -20,6 +20,29 @@
   box-sizing: border-box;
 }
 
+/* 로고 원본(734x883)이 정사각형이 아니므로 비율 유지 */
+#guider-root img {
+  object-fit: contain;
+}
+
+/* --------------------------------------------- 페이지 밀어내기(push) 모드
+   패널이 화면을 덮지 않고, 페이지 본문이 패널 폭만큼 좁아지며 옆으로 밀린다.
+   body 에 transform 을 주면 body 안의 position:fixed 요소(사이트 상단바 등)도
+   좁아진 body 를 기준으로 배치되어 함께 밀려난다. */
+html.guider-pushed {
+  --guider-width: 380px;
+  overflow-x: hidden !important;
+}
+
+html.guider-pushed > body {
+  width: calc(100% - var(--guider-width)) !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  transform: translateX(0);
+  transform-origin: top left;
+  transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* ---------------------------------------------------------------- 패널 */
 #guider-root .guider-panel {
   position: absolute;

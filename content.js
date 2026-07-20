@@ -8,7 +8,7 @@
   if (window.__GUIDER_LOADED__) return;
   window.__GUIDER_LOADED__ = true;
 
-  const LOGO_URL = chrome.runtime.getURL("icons/logo.svg");
+  const LOGO_URL = chrome.runtime.getURL("icons/logo.png");
 
   // ---------------------------------------------------------------------------
   // 시연 시나리오: 질문 키워드 -> 응답 문구 + 하이라이트할 요소 선택자 후보
@@ -149,12 +149,21 @@
   // ---------------------------------------------------------------------------
   // 열기 / 닫기
   // ---------------------------------------------------------------------------
+  // 페이지 본문을 패널 폭만큼 밀어낸다(가리지 않음)
+  function setPushed(on) {
+    document.documentElement.classList.toggle("guider-pushed", on);
+    // 사이트가 레이아웃을 다시 계산하도록 resize 이벤트를 흘려준다
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 340);
+  }
+
   function open() {
     root.classList.add("guider-open");
+    setPushed(true);
     setTimeout(() => field.focus(), 250);
   }
   function close() {
     root.classList.remove("guider-open");
+    setPushed(false);
     clearHighlight();
   }
   function toggle() {
